@@ -13,6 +13,17 @@ type Hit = { kind: "Page" | "Student" | "Action"; label: string; hint: string; h
 const index: Hit[] = [
   { kind: "Action", label: "✦ Register New Candidate", hint: "Admissions & Intake", href: "/dashboard/preadmission?new=1", icon: "Plus" },
   { kind: "Action", label: "✦ Query AI Principal Assistant", hint: "Vanguard Intelligence", href: "/dashboard#assistant", icon: "Sparkles" },
+  { kind: "Page", label: "Student Master Directory", hint: "Management › Students", href: "/dashboard/students", icon: "Users2" },
+  { kind: "Page", label: "Cohort Daily Attendance", hint: "Management › Students", href: "/dashboard/students/attendance", icon: "CalendarCheck2" },
+  { kind: "Page", label: "Curriculum & Syllabi", hint: "Management › Academics", href: "/dashboard/academics", icon: "BookOpen" },
+  { kind: "Page", label: "Examinations & COE Schedule", hint: "Management › Academics", href: "/dashboard/academics/examinations", icon: "Award" },
+  { kind: "Page", label: "Fee Ledgers & Dues", hint: "Finance › Treasury", href: "/dashboard/finance", icon: "Wallet" },
+  { kind: "Page", label: "Live Transactions & Receipts", hint: "Finance › Treasury", href: "/dashboard/finance/transactions", icon: "CreditCard" },
+  { kind: "Page", label: "Workshop Inventory & Assets", hint: "Operations › Campus", href: "/dashboard/inventory", icon: "Package" },
+  { kind: "Page", label: "Faculty & Instructors Directory", hint: "Operations › Campus", href: "/dashboard/faculty", icon: "UserCheck" },
+  { kind: "Page", label: "Institutional Analytics & Compliance", hint: "Insights › Intelligence", href: "/dashboard/reports", icon: "FileBarChart2" },
+  { kind: "Page", label: "Direct Candidate Intake Form", hint: "Admissions › Intake", href: "/dashboard/preadmission/intake", icon: "GraduationCap" },
+  { kind: "Page", label: "Document Verification Queue", hint: "Admissions › Verification", href: "/dashboard/preadmission/verification", icon: "FileCheck2" },
   ...modules.flatMap((m) =>
     m.groups.flatMap((g) =>
       g.items.map((it) => ({

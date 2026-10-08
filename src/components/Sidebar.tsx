@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
   GraduationCap,
@@ -21,53 +21,102 @@ import {
   MoreVertical,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   ArrowRight,
 } from "lucide-react";
 
-interface NavItem {
+interface NavSubItem {
   name: string;
   href: string;
+  badge?: string;
+}
+
+interface NavItem {
+  name: string;
+  href?: string;
   icon: any;
   category?: string;
   badge?: string;
+  subItems?: NavSubItem[];
 }
 
 const navItems: { category: string; items: NavItem[] }[] = [
   {
     category: "OVERVIEW",
     items: [
-      { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+      { name: "Executive Cockpit", href: "/dashboard", icon: LayoutDashboard },
     ],
   },
   {
     category: "MANAGEMENT",
     items: [
-      { name: "Admissions", href: "/dashboard/preadmission", icon: GraduationCap, badge: "13" },
-      { name: "Students", href: "/dashboard#students", icon: Users2 },
-      { name: "Academics", href: "/dashboard#academics", icon: BookOpen },
-      { name: "Attendance", href: "/dashboard#attendance", icon: CalendarCheck2 },
+      {
+        name: "Admissions",
+        icon: GraduationCap,
+        badge: "13",
+        subItems: [
+          { name: "Applicant Pipeline", href: "/dashboard/preadmission", badge: "13" },
+          { name: "Direct Intake Form", href: "/dashboard/preadmission/intake", badge: "New" },
+          { name: "Document Verification", href: "/dashboard/preadmission/verification", badge: "8" },
+        ],
+      },
+      {
+        name: "Students",
+        icon: Users2,
+        badge: "1,248",
+        subItems: [
+          { name: "Master Directory", href: "/dashboard/students" },
+          { name: "Cohort Attendance", href: "/dashboard/students/attendance", badge: "91%" },
+        ],
+      },
+      {
+        name: "Academics",
+        icon: BookOpen,
+        badge: "24",
+        subItems: [
+          { name: "Curriculum & Syllabi", href: "/dashboard/academics" },
+          { name: "Examinations & COE", href: "/dashboard/academics/examinations", badge: "Oct 14" },
+        ],
+      },
     ],
   },
   {
     category: "FINANCE",
     items: [
-      { name: "Fees & Finance", href: "/dashboard#finance", icon: Wallet },
-      { name: "Payments", href: "/dashboard#payments", icon: CreditCard },
+      {
+        name: "Fees & Treasury",
+        icon: Wallet,
+        badge: "₹",
+        subItems: [
+          { name: "Fee Ledgers & Dues", href: "/dashboard/finance" },
+          { name: "Live Transactions", href: "/dashboard/finance/transactions", badge: "Audit" },
+        ],
+      },
     ],
   },
   {
     category: "OPERATIONS",
     items: [
-      { name: "Inventory", href: "/dashboard#inventory", icon: Package },
-      { name: "Purchase", href: "/dashboard#purchase", icon: ShoppingCart },
-      { name: "Faculty / Staff", href: "/dashboard#faculty", icon: UserCheck },
+      {
+        name: "Campus Operations",
+        icon: Package,
+        subItems: [
+          { name: "Workshop Inventory", href: "/dashboard/inventory", badge: "2 Low" },
+          { name: "Faculty & Staff", href: "/dashboard/faculty", badge: "13" },
+        ],
+      },
     ],
   },
   {
     category: "INSIGHTS",
     items: [
-      { name: "Reports", href: "/dashboard#reports", icon: FileBarChart2 },
-      { name: "Settings", href: "/dashboard#settings", icon: Settings },
+      {
+        name: "Intelligence",
+        icon: FileBarChart2,
+        subItems: [
+          { name: "Institutional Analytics", href: "/dashboard/reports", badge: "AI" },
+        ],
+      },
     ],
   },
 ];
@@ -82,6 +131,34 @@ export default function Sidebar({
   const pathname = usePathname();
   const [internalCollapsed, setInternalCollapsed] = useState(false);
   const isCollapsed = collapsed !== undefined ? collapsed : internalCollapsed;
+
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({
+    Admissions: true,
+    Students: true,
+    Academics: false,
+    "Fees & Treasury": false,
+    "Campus Operations": false,
+    Intelligence: false,
+  });
+
+  // Auto-expand parent dropdown if current route matches any child
+  useEffect(() => {
+    navItems.forEach((group) => {
+      group.items.forEach((item) => {
+        if (item.subItems?.some((sub) => pathname === sub.href || pathname.startsWith(sub.href + "/"))) {
+          setExpandedItems((prev) => ({ ...prev, [item.name]: true }));
+        }
+      });
+    });
+  }, [pathname]);
+
+  const toggleDropdown = (itemName: string) => {
+    setExpandedItems((prev) => ({
+      ...prev,
+      [itemName]: !prev[itemName],
+    }));
+  };
+
   const toggleCollapse = () => {
     if (setCollapsed) setCollapsed(!isCollapsed);
     else setInternalCollapsed(!internalCollapsed);
@@ -132,7 +209,7 @@ export default function Sidebar({
       </div>
 
       {/* Navigation List */}
-      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 no-scrollbar">
+      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-5 no-scrollbar">
         {navItems.map((group) => (
           <div key={group.category} className="space-y-1">
             {!isCollapsed && (
@@ -142,26 +219,135 @@ export default function Sidebar({
             )}
             <div className="mt-1 space-y-0.5">
               {group.items.map((item) => {
-                const isActive =
+                const Icon = item.icon;
+                const hasSubItems = Boolean(item.subItems && item.subItems.length > 0);
+                const isExpanded = Boolean(expandedItems[item.name]);
+
+                const isParentActive = hasSubItems
+                  ? item.subItems!.some(
+                      (sub) => pathname === sub.href || pathname.startsWith(sub.href + "/")
+                    )
+                  : item.href === "/dashboard"
+                  ? pathname === "/dashboard"
+                  : Boolean(item.href && pathname.startsWith(item.href));
+
+                if (hasSubItems) {
+                  return (
+                    <div key={item.name} className="space-y-0.5">
+                      <button
+                        type="button"
+                        onClick={() => toggleDropdown(item.name)}
+                        className={`w-full relative flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all group ${
+                          isParentActive
+                            ? "bg-[#F4F1FF] text-[#5B4BFF] font-semibold"
+                            : "text-[#55565D] hover:bg-[#F8F7F4] hover:text-[#171719]"
+                        }`}
+                        title={isCollapsed ? item.name : undefined}
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <Icon
+                            size={18}
+                            className={`shrink-0 transition-colors ${
+                              isParentActive
+                                ? "text-[#5B4BFF]"
+                                : "text-[#7B7D86] group-hover:text-[#171719]"
+                            }`}
+                          />
+                          {!isCollapsed && (
+                            <span className="truncate tracking-tight">{item.name}</span>
+                          )}
+                        </div>
+
+                        {!isCollapsed && (
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {item.badge && (
+                              <span className="px-1.5 py-0.2 rounded-full text-[10px] font-semibold bg-[#5B4BFF]/10 text-[#5B4BFF]">
+                                {item.badge}
+                              </span>
+                            )}
+                            <ChevronDown
+                              size={14}
+                              className={`text-[#8E909A] transition-transform duration-200 ${
+                                isExpanded ? "rotate-180" : ""
+                              }`}
+                            />
+                          </div>
+                        )}
+                      </button>
+
+                      {/* Expandable Sub-items Dropdown Accordion */}
+                      <AnimatePresence initial={false}>
+                        {isExpanded && !isCollapsed && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.2, ease: "easeInOut" }}
+                            className="overflow-hidden pl-7 pr-1 py-1 space-y-0.5 relative before:absolute before:left-5 before:top-2 before:bottom-2 before:w-[1.5px] before:bg-[#141414]/[0.07]"
+                          >
+                            {item.subItems!.map((sub) => {
+                              const isSubActive =
+                                pathname === sub.href || pathname.startsWith(sub.href + "/");
+
+                              return (
+                                <Link
+                                  key={sub.name}
+                                  href={sub.href}
+                                  className={`relative flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                                    isSubActive
+                                      ? "bg-[#EEEBFF] text-[#5B4BFF] font-semibold"
+                                      : "text-[#6F7077] hover:text-[#171719] hover:bg-[#F8F7F4]"
+                                  }`}
+                                >
+                                  <div className="flex items-center gap-2 truncate">
+                                    <span
+                                      className={`size-1.5 rounded-full shrink-0 transition-colors ${
+                                        isSubActive
+                                          ? "bg-[#5B4BFF] shadow-xs shadow-[#5B4BFF]"
+                                          : "bg-[#141414]/20"
+                                      }`}
+                                    />
+                                    <span className="truncate">{sub.name}</span>
+                                  </div>
+                                  {sub.badge && (
+                                    <span
+                                      className={`px-1.5 py-0.5 text-[9px] font-bold rounded-full ${
+                                        isSubActive
+                                          ? "bg-[#5B4BFF]/20 text-[#5B4BFF]"
+                                          : "bg-[#141414]/[0.05] text-[#8E909A]"
+                                      }`}
+                                    >
+                                      {sub.badge}
+                                    </span>
+                                  )}
+                                </Link>
+                              );
+                            })}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                }
+
+                // Standard item without sub-items
+                const isSingleActive =
                   item.href === "/dashboard"
                     ? pathname === "/dashboard"
-                    : pathname.startsWith(item.href);
-
-                const Icon = item.icon;
+                    : Boolean(item.href && pathname.startsWith(item.href));
 
                 return (
                   <Link
                     key={item.name}
-                    href={item.href}
+                    href={item.href || "/dashboard"}
                     className={`relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all group ${
-                      isActive
+                      isSingleActive
                         ? "bg-[#EEEBFF] text-[#5B4BFF] font-semibold"
                         : "text-[#55565D] hover:bg-[#F8F7F4] hover:text-[#171719]"
                     }`}
                     title={isCollapsed ? item.name : undefined}
                   >
-                    {/* Active vertical pill indicator */}
-                    {isActive && (
+                    {isSingleActive && (
                       <motion.div
                         layoutId="activeNavPill"
                         className="absolute right-0 top-2 bottom-2 w-1 rounded-l-full bg-[#5B4BFF]"
@@ -170,7 +356,7 @@ export default function Sidebar({
                     <Icon
                       size={18}
                       className={`shrink-0 transition-colors ${
-                        isActive
+                        isSingleActive
                           ? "text-[#5B4BFF]"
                           : "text-[#7B7D86] group-hover:text-[#171719]"
                       }`}
