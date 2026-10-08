@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
-import { Cinzel, Plus_Jakarta_Sans } from "next/font/google";
+import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/context/ThemeContext";
 import "./globals.css";
 
-const cinzel = Cinzel({
-  variable: "--font-cinzel",
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -21,10 +24,10 @@ export const metadata: Metadata = {
   description: "Eduvyapar — Next-Generation Institutional Management & Intelligence Platform",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${cinzel.variable} ${plusJakarta.variable} antialiased light`}>
-      <body className="grain min-h-screen transition-colors duration-500 selection:bg-[#39ff14] selection:text-[#05080e]">
+    <html lang="en" className={`${playfair.variable} ${plusJakarta.variable} light`}>
+      <body className="bg-[#F6F4EF] text-[#171719] font-sans antialiased min-h-screen selection:bg-[#EEEBFF] selection:text-[#5B4BFF]">
         <ThemeProvider>
           <SmoothScroll>{children}</SmoothScroll>
         </ThemeProvider>

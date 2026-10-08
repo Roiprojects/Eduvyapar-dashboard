@@ -78,23 +78,23 @@ export default function CommandPalette({ open, setOpen }: { open: boolean; setOp
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[90] flex items-start justify-center px-3 pt-[14vh]"
+          className="fixed inset-0 z-[90] flex items-start justify-center px-4 pt-[12vh]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <div className="absolute inset-0 bg-[#05080e]/80 backdrop-blur-md" onClick={close} />
+          <div className="absolute inset-0 bg-[#171719]/30 backdrop-blur-sm" onClick={close} />
           <motion.div
             role="dialog"
             aria-label="Command search"
-            initial={{ y: -20, scale: 0.96 }}
+            initial={{ y: -16, scale: 0.97 }}
             animate={{ y: 0, scale: 1 }}
             exit={{ y: -10, scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 320, damping: 28 }}
-            className="glass relative w-full max-w-xl overflow-hidden rounded-3xl border border-white/[0.12] bg-[#09111e]/95 shadow-2xl shadow-black/90"
+            transition={{ type: "spring", stiffness: 350, damping: 30 }}
+            className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-[#141414]/[0.08] bg-[#FFFFFF] shadow-2xl"
           >
-            <label className="flex items-center gap-3 border-b border-white/[0.08] px-5 bg-white/[0.02]">
-              <Search size={18} className="text-[#39ff14]" />
+            <label className="flex items-center gap-3 border-b border-[#141414]/[0.06] px-5 py-3.5 bg-[#FBFAF7]">
+              <Search size={18} className="text-[#5B4BFF]" />
               <input
                 autoFocus
                 value={q}
@@ -115,9 +115,9 @@ export default function CommandPalette({ open, setOpen }: { open: boolean; setOp
                   if (e.key === "Escape") close();
                 }}
                 placeholder="Jump to page, lookup candidate, or execute command…"
-                className="flex-1 bg-transparent py-4 text-sm text-white placeholder-white/40 outline-none"
+                className="flex-1 bg-transparent text-sm text-[#171719] placeholder:text-[#8E909A] outline-none"
               />
-              <kbd className="rounded-md bg-white/[0.08] px-2 py-0.5 text-[11px] font-semibold text-white/50 border border-white/[0.06]">
+              <kbd className="rounded-md bg-white px-2 py-0.5 text-[11px] font-semibold text-[#6F7077] border border-[#141414]/[0.08]">
                 Esc
               </kbd>
             </label>
@@ -130,41 +130,41 @@ export default function CommandPalette({ open, setOpen }: { open: boolean; setOp
                     <button
                       onMouseEnter={() => setSel(i)}
                       onClick={() => go(h)}
-                      className={`flex w-full items-center gap-3 rounded-2xl px-3.5 py-3 text-left transition ${
+                      className={`flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-left transition ${
                         on
-                          ? "bg-white/[0.1] text-white border border-[#39ff14]/30"
-                          : "text-white/70 hover:bg-white/[0.04]"
+                          ? "bg-[#EEEBFF] text-[#171719]"
+                          : "text-[#55565D] hover:bg-[#F6F4EF]"
                       }`}
                     >
                       <span
-                        className={`grid size-9 place-items-center rounded-xl transition ${
+                        className={`grid size-8 place-items-center rounded-lg transition ${
                           on
-                            ? "bg-gradient-to-br from-[#0c2440] to-[#071322] text-[#39ff14] border border-[#39ff14]/30"
-                            : "bg-white/[0.04] text-white/40"
+                            ? "bg-[#5B4BFF] text-white shadow-sm"
+                            : "bg-[#F6F4EF] text-[#6F7077]"
                         }`}
                       >
-                        <Icon size={16} />
+                        <Icon size={15} />
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-semibold text-white">{h.label}</span>
-                        <span className={`block truncate text-xs ${on ? "text-white/70" : "text-white/40"}`}>
+                        <span className="block truncate text-xs font-semibold text-[#171719]">{h.label}</span>
+                        <span className={`block truncate text-[11px] ${on ? "text-[#5B4BFF]" : "text-[#6F7077]"}`}>
                           {h.hint}
                         </span>
                       </span>
                       <span
-                        className={`text-[10px] font-bold tracking-widest uppercase ${
-                          on ? "text-[#e5c378]" : "text-white/30"
+                        className={`text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full ${
+                          on ? "bg-white text-[#5B4BFF]" : "bg-[#F6F4EF] text-[#8E909A]"
                         }`}
                       >
                         {h.kind}
                       </span>
-                      {on && <CornerDownLeft size={14} className="text-[#39ff14]" />}
+                      {on && <CornerDownLeft size={13} className="text-[#5B4BFF]" />}
                     </button>
                   </li>
                 );
               })}
               {!hits.length && (
-                <li className="p-8 text-center text-sm text-white/40">No records matching “{q}”.</li>
+                <li className="p-8 text-center text-xs text-[#8E909A]">No records matching “{q}”.</li>
               )}
             </ul>
           </motion.div>

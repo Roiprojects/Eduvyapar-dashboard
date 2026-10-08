@@ -1,23 +1,24 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-display: var(--font-cinzel), var(--font-playfair), serif;
+  --font-serif: var(--font-playfair), Georgia, serif;
+  --font-display: var(--font-playfair), Georgia, serif;
   --font-sans: var(--font-plus-jakarta), system-ui, sans-serif;
-  --color-obsidian: #05080e;
-  --color-slate: #0b131e;
-  --color-navy: #0e1a2b;
-  --color-gold: #e5c378;
-  --color-gold-light: #fae6b2;
-  --color-lime: #39ff14;
-  --color-emerald: #2fd3a5;
-  --color-cyan: #00f0ff;
-  --color-violet: #8a5cf6;
-  --color-ink: #f4f6fa;
-  --color-muted: #8e9bb0;
+  --color-canvas: #F6F4EF;
+  --color-surface: #FFFFFF;
+  --color-surface-soft: #FBFAF7;
+  --color-ink: #171719;
+  --color-muted: #6F7077;
+  --color-border: rgba(20, 20, 20, 0.06);
+  --color-accent: #5B4BFF;
+  --color-accent-soft: #EEEBFF;
+  --color-success: #35B779;
+  --color-warning: #E6A23C;
+  --color-danger: #E45D5D;
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html.lenis,
@@ -35,18 +36,44 @@ html.lenis body {
 }
 
 body {
-  background: #05080e;
-  color: #f4f6fa;
+  background: #F6F4EF;
+  color: #171719;
   font-family: var(--font-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  selection-background-color: #39ff14;
-  selection-color: #05080e;
+  selection-background-color: #EEEBFF;
+  selection-color: #5B4BFF;
 }
 
 ::selection {
-  background: #39ff14;
-  color: #05080e;
+  background: #EEEBFF;
+  color: #5B4BFF;
+}
+
+/* Luxury Light Card Shadows and Layering */
+.editorial-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(20, 20, 20, 0.05);
+  box-shadow: 0 4px 20px -2px rgba(23, 23, 25, 0.03), 0 1px 3px 0 rgba(23, 23, 25, 0.02);
+}
+
+.editorial-card-elevated {
+  background: #FFFFFF;
+  border: 1px solid rgba(20, 20, 20, 0.06);
+  box-shadow: 0 12px 36px -4px rgba(23, 23, 25, 0.06), 0 2px 6px 0 rgba(23, 23, 25, 0.03);
+}
+
+.editorial-tag {
+  background: #FBFAF7;
+  border: 1px solid rgba(20, 20, 20, 0.06);
+  color: #6F7077;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
 }
 
 /* Flying Whales luxury dark glass */
