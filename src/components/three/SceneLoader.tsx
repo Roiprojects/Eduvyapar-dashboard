@@ -2,8 +2,8 @@
 
 import dynamic from "next/dynamic";
 
-const OceanScene = dynamic(() => import("./OceanScene"), { ssr: false });
+const AcademicScene = dynamic(() => import("./AcademicScene"), { ssr: false });
 
 export default function SceneLoader() {
-  return <OceanScene />;
+  return <AcademicScene />;
 }
