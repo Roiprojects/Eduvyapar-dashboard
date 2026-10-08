@@ -87,7 +87,7 @@ export default function SignInPage() {
   return (
     <div
       onMouseMove={handleMouseMove}
-      className="relative min-h-[100svh] w-full bg-[#F6F4EF] text-[#171719] overflow-hidden flex flex-col justify-between selection:bg-[#EEEBFF] selection:text-[#5B4BFF]"
+      className="relative min-h-screen w-full bg-[#F6F4EF] text-[#171719] overflow-x-hidden overflow-y-auto flex flex-col justify-between selection:bg-[#EEEBFF] selection:text-[#5B4BFF]"
     >
       {/* ── Layer 0: Atmospheric Architectural Background ── */}
       <motion.div
@@ -101,7 +101,7 @@ export default function SignInPage() {
           className="absolute -top-32 left-1/4 w-[80vw] h-[70vh] bg-gradient-to-b from-[#FFFDF7] via-[#FFF9EE]/40 to-transparent blur-3xl pointer-events-none"
         />
         {/* Travertine perspective grid lines */}
-        <div className="absolute inset-0 opacity-[0.035] bg-[linear-gradient(to_right,#171719_1px,transparent_1px),linear-gradient(to_bottom,#171719_1px,transparent_1px)] bg-[size:4.5rem_4.5rem]" />
+        <div className="absolute inset-0 opacity-[0.035] bg-[linear-gradient(to_right,#171719_1px,transparent_1px),linear-gradient(to_bottom,#171719_1px,transparent_1px)] [background-size:4.5rem_4.5rem]" />
       </motion.div>
 
       {/* ── Layer 1: Three.js Sculptural Ribbon Installation ── */}
