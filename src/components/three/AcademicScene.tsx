@@ -109,7 +109,7 @@ function createWorldMapTexture(isLight: boolean): THREE.CanvasTexture | null {
   const academicHubs: [number, number, string][] = [
     [-0.1, 51.5, "Oxford & Cambridge"],
     [-71.1, 42.3, "Harvard & MIT"],
-    [77.6, 12.9, "Eduvyapar Sovereign Hub"],
+    [77.6, 12.9, "AIVRM Sovereign Hub"],
     [103.8, 1.3, "National University"],
     [8.5, 47.3, "ETH Zurich"],
     [139.7, 35.6, "Tokyo Academic"],
@@ -176,7 +176,7 @@ function createLedgerTexture(isLight: boolean): THREE.CanvasTexture | null {
   // Academic Header
   ctx.fillStyle = isLight ? "#b8860b" : "#e5c378";
   ctx.font = "bold 26px serif";
-  ctx.fillText("EDUVYAPAR SOVEREIGN ACADEMIC ROSTER", 120, 80);
+  ctx.fillText("AIVRM SOVEREIGN ACADEMIC ROSTER", 120, 80);
 
   ctx.fillStyle = isLight ? "#526077" : "#94a3b8";
   ctx.font = "italic 16px serif";

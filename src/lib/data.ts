@@ -1,7 +1,7 @@
 export const school = {
   name: "Sri Vivekananda PVT ITI",
   short: "SVPITI",
-  product: "Eduvyapar",
+  product: "AIVRM",
   tollFree: "0120 690 1888",
 };
 

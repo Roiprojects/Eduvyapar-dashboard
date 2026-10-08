@@ -27,7 +27,7 @@ export default function AIChat() {
   const [msgs, setMsgs] = useState<Msg[]>([
     {
       from: "ai",
-      text: "✦ Greetings, Principal. Eduvyapar AI Intelligence is synchronized with all institutional ledgers. What can I analyze for you today?",
+      text: "✦ Greetings, Principal. AIVRM AI Intelligence is synchronized with all institutional ledgers. What can I analyze for you today?",
     },
   ]);
   const [text, setText] = useState("");

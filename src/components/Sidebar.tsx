@@ -115,7 +115,7 @@ export default function Sidebar({
           {!isCollapsed && (
             <div className="flex flex-col">
               <span className="font-extrabold text-[15px] tracking-wider text-[#171719] font-sans">
-                EDUVYAPAR
+                AIVRM
               </span>
             </div>
           )}

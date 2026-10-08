@@ -20,8 +20,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Eduvyapar · Sovereign Digital Campus",
-  description: "Eduvyapar — Next-Generation Institutional Management & Intelligence Platform",
+  title: "AIVRM · Sovereign Digital Campus",
+  description: "AIVRM — Next-Generation Institutional Management & Intelligence Platform",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

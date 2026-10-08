@@ -23,7 +23,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem("eduvyapar-theme") as Theme | null;
+    const stored = (localStorage.getItem("aivrm-theme") || localStorage.getItem("eduvyapar-theme")) as Theme | null;
     const initialTheme: Theme = stored || "light";
     setThemeState(initialTheme);
     applyTheme(initialTheme);
@@ -45,7 +45,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const setTheme = (t: Theme) => {
     setThemeState(t);
     applyTheme(t);
-    localStorage.setItem("eduvyapar-theme", t);
+    localStorage.setItem("aivrm-theme", t);
   };
 
   const toggleTheme = () => {

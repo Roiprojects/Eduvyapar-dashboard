@@ -26,7 +26,7 @@ const ChapterZeroScene = dynamic(
 
 export default function SignInPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("admin@eduvyapar.edu");
+  const [username, setUsername] = useState("admin@aivrm.edu");
   const [password, setPassword] = useState("demo1234");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
@@ -133,7 +133,7 @@ export default function SignInPage() {
           </div>
           <div>
             <span className="font-extrabold text-[15px] tracking-wider text-[#171719] font-sans block leading-none">
-              EDUVYAPAR
+              AIVRM
             </span>
             <span className="text-[10px] font-bold tracking-[0.22em] text-[#6F7077] uppercase block mt-1">
               Sovereign Digital Campus
@@ -285,7 +285,7 @@ export default function SignInPage() {
                       onFocus={() => setFocusedField("username")}
                       onBlur={() => setFocusedField(null)}
                       autoComplete="username"
-                      placeholder="admin@eduvyapar.edu"
+                      placeholder="admin@aivrm.edu"
                       className="w-full rounded-2xl border border-[#141414]/[0.08] bg-[#FBFAF7] py-3.5 pr-4 pl-11 text-xs sm:text-sm text-[#171719] placeholder:text-[#8E909A] outline-none focus:bg-[#FFFFFF] focus:border-[#5B4BFF] focus:ring-4 focus:ring-[#5B4BFF]/10 transition"
                     />
                   </div>
@@ -404,7 +404,7 @@ export default function SignInPage() {
       {/* ── Layer 4: Minimal Editorial Footer ── */}
       <footer className="relative z-30 flex flex-col sm:flex-row items-center justify-between gap-3 px-6 sm:px-10 lg:px-16 py-5 border-t border-[#141414]/[0.05] bg-white/40 backdrop-blur-md text-xs text-[#6F7077]">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-[#171719]">EduVyapar</span>
+          <span className="font-semibold text-[#171719]">AIVRM</span>
           <span>·</span>
           <span>Chapter 00 Enterprise Release 2026.4</span>
         </div>

@@ -43,7 +43,7 @@ export default function ClosingStoryChapter() {
           <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-white/70 to-white/40 lg:bg-gradient-to-r lg:from-white/95 lg:via-white/70 lg:to-transparent" />
         </div>
 
-        {/* Top: EduVyapar Identity Mark */}
+        {/* Top: AIVRM Identity Mark */}
         <div className="relative z-10 flex items-center gap-3">
           <div className="size-10 rounded-xl bg-gradient-to-tr from-[#4438CA] via-[#5B4BFF] to-[#818CF8] flex items-center justify-center shadow-md shadow-[#5B4BFF]/25">
             <svg
@@ -62,7 +62,7 @@ export default function ClosingStoryChapter() {
           </div>
           <div>
             <span className="font-extrabold text-[15px] tracking-wider text-[#171719] font-sans block leading-none">
-              EDUVYAPAR
+              AIVRM
             </span>
             <span className="text-[10px] font-bold tracking-[0.2em] text-[#6F7077] uppercase block mt-0.5">
               Light Story Mode · Institutional Operating System
@@ -116,7 +116,7 @@ export default function ClosingStoryChapter() {
           </div>
 
           <p className="text-[11px] text-[#8E909A]">
-            © 2026 EduVyapar Inc. All institutional rights reserved.
+            © 2026 AIVRM Inc. All institutional rights reserved.
           </p>
         </div>
       </div>
