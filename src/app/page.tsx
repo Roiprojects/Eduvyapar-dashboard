@@ -158,14 +158,14 @@ export default function SignInPage() {
 
       {/* ── Layer 3: Main Cinematic Composition (Foreground) ── */}
       <main className="relative z-20 flex-1 max-w-7xl mx-auto w-full px-6 sm:px-10 lg:px-16 py-8 sm:py-12 flex flex-col justify-center">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 xl:gap-16 items-center w-full">
           {/* ── Left Editorial Copy Block (lg:col-span-7) ── */}
           <motion.div
             style={{ x: isTouchDevice ? 0 : uiX, y: isTouchDevice ? 0 : uiY }}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="space-y-6 lg:max-w-xl"
+            className="w-full lg:col-span-7 min-w-0 space-y-6 lg:max-w-2xl"
           >
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFFFFF]/80 backdrop-blur-md border border-[#141414]/[0.06] shadow-xs text-xs font-bold text-[#5B4BFF]">
               <Sparkles size={13} className="text-[#5B4BFF]" />
@@ -192,7 +192,7 @@ export default function SignInPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="font-serif text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-[#171719] tracking-tight leading-[0.98]"
+                    className="font-serif text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4.25rem] 2xl:text-[5rem] font-bold text-[#171719] tracking-tight leading-[1.04]"
                   >
                     Education<br />
                     is not managed.<br />
@@ -236,7 +236,7 @@ export default function SignInPage() {
               scale: isSuccess ? 0.95 : 1,
             }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-md mx-auto lg:ml-auto"
+            className="w-full lg:col-span-5 min-w-0 max-w-md mx-auto lg:ml-auto"
           >
             <div
               className={`relative rounded-3xl p-6 sm:p-8 transition-all duration-300 ${
