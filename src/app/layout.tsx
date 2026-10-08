@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cinzel, Plus_Jakarta_Sans } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
+import { ThemeProvider } from "@/context/ThemeContext";
 import "./globals.css";
 
 const cinzel = Cinzel({
@@ -22,9 +23,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${cinzel.variable} ${plusJakarta.variable} antialiased dark`}>
-      <body className="grain min-h-screen bg-[#05080e] text-[#f4f6fa] selection:bg-[#39ff14] selection:text-[#05080e]">
-        <SmoothScroll>{children}</SmoothScroll>
+    <html lang="en" className={`${cinzel.variable} ${plusJakarta.variable} antialiased light`}>
+      <body className="grain min-h-screen transition-colors duration-500 selection:bg-[#39ff14] selection:text-[#05080e]">
+        <ThemeProvider>
+          <SmoothScroll>{children}</SmoothScroll>
+        </ThemeProvider>
       </body>
     </html>
   );

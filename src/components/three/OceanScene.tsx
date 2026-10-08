@@ -5,6 +5,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Float, Lightformer, Sparkles } from "@react-three/drei";
 import * as THREE from "three";
 import { scrollState } from "@/lib/scroll";
+import { useTheme } from "@/context/ThemeContext";
 
 const damp = THREE.MathUtils.damp;
 
@@ -13,7 +14,7 @@ const damp = THREE.MathUtils.damp;
  * Precision sculpted from luminous golden rib rings, sapphire crystal glass body,
  * and gossamer solar fins that undulate with organic fluid physics.
  */
-function LuxuryCelestialWhale() {
+function LuxuryCelestialWhale({ isLight }: { isLight: boolean }) {
   const group = useRef<THREE.Group>(null!);
   const spineGroup = useRef<THREE.Group>(null!);
   const fluke = useRef<THREE.Group>(null!);
@@ -24,7 +25,6 @@ function LuxuryCelestialWhale() {
   const ribs = useMemo(() => {
     return Array.from({ length: 12 }, (_, i) => {
       const progress = i / 11;
-      // Fluid whale profile taper (widest at thorax, tapering to head & fluke)
       const scale = Math.sin(progress * Math.PI * 0.85 + 0.25) * 0.95 + 0.15;
       const zOffset = -i * 0.42;
       return { id: i, scale, zOffset };
@@ -36,7 +36,7 @@ function LuxuryCelestialWhale() {
     const t = state.clock.elapsedTime * 1.1;
     const scroll = scrollState.progress;
 
-    // Graceful 3D trajectory through the cosmic space
+    // Graceful 3D trajectory through space
     const targetY = 1.1 - scroll * 9.8 + Math.sin(t * 0.35) * 0.35;
     const targetX = 1.6 + Math.cos(t * 0.28) * 0.5 + state.pointer.x * 0.4;
     const targetZ = -1.1 - Math.sin(scroll * Math.PI) * 1.2;
@@ -81,24 +81,33 @@ function LuxuryCelestialWhale() {
       <mesh position={[0, 0, 0.4]}>
         <sphereGeometry args={[0.62, 32, 24]} />
         <meshPhysicalMaterial
-          color="#0b1e36"
-          roughness={0.12}
-          metalness={0.7}
-          transmission={0.4}
+          color={isLight ? "#e2e8f0" : "#0b1e36"}
+          roughness={0.08}
+          metalness={isLight ? 0.3 : 0.7}
+          transmission={isLight ? 0.8 : 0.4}
           ior={1.5}
           clearcoat={1.0}
-          clearcoatRoughness={0.08}
+          clearcoatRoughness={0.05}
         />
       </mesh>
 
       {/* Golden Astrolabe Coronet around Head */}
       <mesh position={[0, 0, 0.4]} rotation={[Math.PI / 6, 0, 0]}>
         <torusGeometry args={[0.66, 0.022, 16, 64]} />
-        <meshStandardMaterial color="#e5c378" metalness={0.95} roughness={0.18} />
+        <meshStandardMaterial
+          color={isLight ? "#b8860b" : "#e5c378"}
+          metalness={0.96}
+          roughness={0.15}
+        />
       </mesh>
 
       {/* Bioluminescent Starlight Crown Node */}
-      <pointLight position={[0, 0.5, 0.2]} color="#39ff14" intensity={2.2} distance={3.8} />
+      <pointLight
+        position={[0, 0.5, 0.2]}
+        color={isLight ? "#059669" : "#39ff14"}
+        intensity={2.4}
+        distance={3.8}
+      />
 
       {/* Articulated Spine Rib Cage */}
       <group ref={spineGroup} position={[0, 0, 0]}>
@@ -108,21 +117,29 @@ function LuxuryCelestialWhale() {
             <mesh rotation={[Math.PI / 2, 0, 0]}>
               <torusGeometry args={[0.55 * scale, 0.018, 16, 48]} />
               <meshStandardMaterial
-                color={id % 2 === 0 ? "#e5c378" : "#39ff14"}
-                metalness={0.92}
-                roughness={0.2}
+                color={
+                  id % 2 === 0
+                    ? isLight
+                      ? "#b8860b"
+                      : "#e5c378"
+                    : isLight
+                    ? "#059669"
+                    : "#39ff14"
+                }
+                metalness={0.94}
+                roughness={0.18}
                 wireframe={id % 3 === 0}
               />
             </mesh>
 
-            {/* Inner Translucent Sapphire Volume */}
+            {/* Inner Translucent Volume */}
             <mesh>
               <sphereGeometry args={[0.52 * scale, 24, 16]} />
               <meshPhysicalMaterial
-                color="#061324"
-                roughness={0.2}
-                metalness={0.65}
-                transmission={0.35}
+                color={isLight ? "#f8fafc" : "#061324"}
+                roughness={0.15}
+                metalness={isLight ? 0.2 : 0.65}
+                transmission={isLight ? 0.8 : 0.35}
                 clearcoat={0.9}
               />
             </mesh>
@@ -130,7 +147,7 @@ function LuxuryCelestialWhale() {
             {/* Glowing Vertebral Axis Point */}
             <mesh position={[0, 0, 0]}>
               <sphereGeometry args={[0.045, 12, 12]} />
-              <meshBasicMaterial color="#fae6b2" />
+              <meshBasicMaterial color={isLight ? "#b8860b" : "#fae6b2"} />
             </mesh>
           </group>
         ))}
@@ -141,23 +158,25 @@ function LuxuryCelestialWhale() {
         <mesh position={[-1.1, 0, 0]}>
           <boxGeometry args={[2.2, 0.025, 0.55]} />
           <meshPhysicalMaterial
-            color="#0f2b4c"
-            transmission={0.65}
-            roughness={0.15}
-            metalness={0.8}
+            color={isLight ? "#f8fafc" : "#0f2b4c"}
+            transmission={isLight ? 0.85 : 0.65}
+            roughness={0.1}
+            metalness={isLight ? 0.2 : 0.8}
             clearcoat={1.0}
           />
         </mesh>
-        {/* Golden Leading Edge Spar */}
         <mesh position={[-1.1, 0.015, 0.24]}>
           <boxGeometry args={[2.25, 0.03, 0.04]} />
-          <meshStandardMaterial color="#e5c378" metalness={0.95} roughness={0.15} />
+          <meshStandardMaterial
+            color={isLight ? "#b8860b" : "#e5c378"}
+            metalness={0.95}
+            roughness={0.15}
+          />
         </mesh>
-        {/* Neon Filament Ribs */}
         {[-0.4, -0.9, -1.4, -1.9].map((x, i) => (
           <mesh key={i} position={[x, 0, 0]}>
             <cylinderGeometry args={[0.012, 0.012, 0.52, 8]} />
-            <meshBasicMaterial color="#39ff14" />
+            <meshBasicMaterial color={isLight ? "#059669" : "#39ff14"} />
           </mesh>
         ))}
       </group>
@@ -167,58 +186,65 @@ function LuxuryCelestialWhale() {
         <mesh position={[1.1, 0, 0]}>
           <boxGeometry args={[2.2, 0.025, 0.55]} />
           <meshPhysicalMaterial
-            color="#0f2b4c"
-            transmission={0.65}
-            roughness={0.15}
-            metalness={0.8}
+            color={isLight ? "#f8fafc" : "#0f2b4c"}
+            transmission={isLight ? 0.85 : 0.65}
+            roughness={0.1}
+            metalness={isLight ? 0.2 : 0.8}
             clearcoat={1.0}
           />
         </mesh>
-        {/* Golden Leading Edge Spar */}
         <mesh position={[1.1, 0.015, 0.24]}>
           <boxGeometry args={[2.25, 0.03, 0.04]} />
-          <meshStandardMaterial color="#e5c378" metalness={0.95} roughness={0.15} />
+          <meshStandardMaterial
+            color={isLight ? "#b8860b" : "#e5c378"}
+            metalness={0.95}
+            roughness={0.15}
+          />
         </mesh>
-        {/* Neon Filament Ribs */}
         {[0.4, 0.9, 1.4, 1.9].map((x, i) => (
           <mesh key={i} position={[x, 0, 0]}>
             <cylinderGeometry args={[0.012, 0.012, 0.52, 8]} />
-            <meshBasicMaterial color="#39ff14" />
+            <meshBasicMaterial color={isLight ? "#059669" : "#39ff14"} />
           </mesh>
         ))}
       </group>
 
-      {/* Majestic Caudal Fluke (Tail) */}
+      {/* Caudal Fluke (Tail) */}
       <group ref={fluke} position={[0, 0, -4.9]}>
-        {/* Fluke Cross-Spar */}
         <mesh rotation={[0, 0, Math.PI / 2]}>
           <cylinderGeometry args={[0.035, 0.035, 2.4, 16]} />
-          <meshStandardMaterial color="#e5c378" metalness={0.95} roughness={0.15} />
+          <meshStandardMaterial
+            color={isLight ? "#b8860b" : "#e5c378"}
+            metalness={0.95}
+            roughness={0.15}
+          />
         </mesh>
-        {/* Left Fluke Blade */}
         <mesh position={[-0.65, 0, -0.32]} rotation={[0, 0.28, Math.PI / 2]}>
           <boxGeometry args={[0.55, 0.02, 1.1]} />
           <meshPhysicalMaterial
-            color="#0f2b4c"
-            transmission={0.7}
-            roughness={0.15}
-            metalness={0.7}
+            color={isLight ? "#f8fafc" : "#0f2b4c"}
+            transmission={isLight ? 0.85 : 0.7}
+            roughness={0.12}
+            metalness={0.4}
             clearcoat={1.0}
           />
         </mesh>
-        {/* Right Fluke Blade */}
         <mesh position={[0.65, 0, -0.32]} rotation={[0, -0.28, Math.PI / 2]}>
           <boxGeometry args={[0.55, 0.02, 1.1]} />
           <meshPhysicalMaterial
-            color="#0f2b4c"
-            transmission={0.7}
-            roughness={0.15}
-            metalness={0.7}
+            color={isLight ? "#f8fafc" : "#0f2b4c"}
+            transmission={isLight ? 0.85 : 0.7}
+            roughness={0.12}
+            metalness={0.4}
             clearcoat={1.0}
           />
         </mesh>
-        {/* Caudal Stardust Emitter */}
-        <pointLight position={[0, 0, -0.4]} color="#e5c378" intensity={1.5} distance={2.5} />
+        <pointLight
+          position={[0, 0, -0.4]}
+          color={isLight ? "#b8860b" : "#e5c378"}
+          intensity={1.6}
+          distance={2.5}
+        />
       </group>
     </group>
   );
@@ -226,9 +252,14 @@ function LuxuryCelestialWhale() {
 
 /**
  * Kinetic Celestial Horology Core (Armillary Knowledge Sphere)
- * Razor-sharp concentric rings with rotating astronomical satellites & diamond crystal prism.
  */
-function KineticAstrolabe({ position }: { position: [number, number, number] }) {
+function KineticAstrolabe({
+  position,
+  isLight,
+}: {
+  position: [number, number, number];
+  isLight: boolean;
+}) {
   const ring1 = useRef<THREE.Group>(null!);
   const ring2 = useRef<THREE.Group>(null!);
   const ring3 = useRef<THREE.Group>(null!);
@@ -247,81 +278,93 @@ function KineticAstrolabe({ position }: { position: [number, number, number] }) 
   return (
     <Float speed={1.4} rotationIntensity={0.25} floatIntensity={0.45}>
       <group position={position}>
-        {/* Ring 1 - 18k Champagne Gold Equatorial Ring */}
+        {/* Ring 1 - 18k Champagne Gold */}
         <group ref={ring1}>
           <mesh>
             <torusGeometry args={[1.75, 0.03, 16, 120]} />
-            <meshStandardMaterial color="#e5c378" metalness={0.96} roughness={0.15} />
+            <meshStandardMaterial
+              color={isLight ? "#b8860b" : "#e5c378"}
+              metalness={0.96}
+              roughness={0.15}
+            />
           </mesh>
-          {/* Orbital Satellite Node */}
           <mesh position={[1.75, 0, 0]}>
             <sphereGeometry args={[0.075, 24, 24]} />
-            <meshStandardMaterial color="#39ff14" emissive="#39ff14" emissiveIntensity={0.8} />
+            <meshStandardMaterial
+              color={isLight ? "#059669" : "#39ff14"}
+              emissive={isLight ? "#059669" : "#39ff14"}
+              emissiveIntensity={0.8}
+            />
           </mesh>
           <mesh position={[-1.75, 0, 0]}>
             <sphereGeometry args={[0.055, 20, 20]} />
-            <meshBasicMaterial color="#fae6b2" />
+            <meshBasicMaterial color={isLight ? "#b8860b" : "#fae6b2"} />
           </mesh>
         </group>
 
-        {/* Ring 2 - Platinum Titanium Meridian Ring */}
+        {/* Ring 2 - Platinum Meridian Ring */}
         <group ref={ring2} rotation={[Math.PI / 3, 0, 0]}>
           <mesh>
             <torusGeometry args={[1.45, 0.024, 16, 96]} />
-            <meshStandardMaterial color="#dbeafe" metalness={0.9} roughness={0.2} />
+            <meshStandardMaterial
+              color={isLight ? "#94a3b8" : "#dbeafe"}
+              metalness={0.9}
+              roughness={0.2}
+            />
           </mesh>
           <mesh position={[0, 1.45, 0]}>
             <sphereGeometry args={[0.065, 20, 20]} />
-            <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={0.7} />
+            <meshStandardMaterial
+              color="#0284c7"
+              emissive="#0284c7"
+              emissiveIntensity={0.7}
+            />
           </mesh>
         </group>
 
-        {/* Ring 3 - Electric Lime Precision Dial */}
+        {/* Ring 3 - Precision Emerald Dial */}
         <group ref={ring3} rotation={[0, Math.PI / 4, 0]}>
           <mesh>
             <torusGeometry args={[1.15, 0.018, 12, 80]} />
-            <meshStandardMaterial color="#39ff14" metalness={0.85} roughness={0.3} wireframe />
+            <meshStandardMaterial
+              color={isLight ? "#059669" : "#39ff14"}
+              metalness={0.85}
+              roughness={0.3}
+              wireframe
+            />
           </mesh>
         </group>
 
-        {/* Central Refractive Diamond Prism (Quantum Knowledge Core) */}
+        {/* Central Refractive Diamond Prism */}
         <mesh ref={jewel}>
           <octahedronGeometry args={[0.48, 0]} />
           <meshPhysicalMaterial
             color="#ffffff"
-            transmission={0.92}
-            roughness={0.06}
-            metalness={0.1}
-            ior={1.65}
+            transmission={0.96}
+            roughness={0.04}
+            metalness={0.08}
+            ior={1.72}
             thickness={1.8}
             clearcoat={1.0}
-            clearcoatRoughness={0.05}
+            clearcoatRoughness={0.03}
           />
         </mesh>
-        <pointLight color="#e5c378" intensity={1.8} distance={2.8} />
+        <pointLight
+          color={isLight ? "#b8860b" : "#e5c378"}
+          intensity={2.2}
+          distance={2.8}
+        />
       </group>
     </Float>
   );
 }
 
 /**
- * Parametric Silk Lattice (Quantum Horizon Wave)
- * High-elegance undulating lattice resembling financial liquidity and academic excellence.
+ * Parametric Silk Lattice
  */
-function ParametricSilkMesh() {
+function ParametricSilkMesh({ isLight }: { isLight: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const geomRef = useRef<THREE.PlaneGeometry>(null!);
-
-  // Store initial vertex positions to animate with sine harmonics
-  const initialZ = useMemo(() => {
-    const geom = new THREE.PlaneGeometry(16, 12, 36, 28);
-    const pos = geom.attributes.position;
-    const arr = new Float32Array(pos.count);
-    for (let i = 0; i < pos.count; i++) {
-      arr[i] = pos.getZ(i);
-    }
-    return arr;
-  }, []);
 
   useFrame((state) => {
     if (!geomRef.current) return;
@@ -332,7 +375,6 @@ function ParametricSilkMesh() {
     for (let i = 0; i < count; i++) {
       const x = pos.getX(i);
       const y = pos.getY(i);
-      // Dual harmonic silk wave equation
       const wave =
         Math.sin(x * 0.45 + t) * Math.cos(y * 0.45 + t * 0.8) * 0.55 +
         Math.sin((x + y) * 0.35 + t * 1.2) * 0.3;
@@ -346,11 +388,11 @@ function ParametricSilkMesh() {
       <mesh ref={meshRef}>
         <planeGeometry ref={geomRef} args={[16, 12, 36, 28]} />
         <meshStandardMaterial
-          color="#e5c378"
-          emissive="#0a2a1a"
+          color={isLight ? "#b8860b" : "#e5c378"}
+          emissive={isLight ? "#052e16" : "#0a2a1a"}
           wireframe
           transparent
-          opacity={0.32}
+          opacity={isLight ? 0.38 : 0.32}
           roughness={0.2}
           metalness={0.8}
         />
@@ -365,9 +407,11 @@ function ParametricSilkMesh() {
 function RefractiveMonolith({
   position,
   rotation,
+  isLight,
 }: {
   position: [number, number, number];
   rotation: [number, number, number];
+  isLight: boolean;
 }) {
   const mesh = useRef<THREE.Mesh>(null!);
   useFrame((_, dt) => {
@@ -383,15 +427,15 @@ function RefractiveMonolith({
         <mesh ref={mesh}>
           <dodecahedronGeometry args={[0.82, 0]} />
           <meshPhysicalMaterial
-            color="#0f2642"
-            transmission={0.88}
-            roughness={0.08}
-            ior={1.55}
+            color={isLight ? "#f1f5f9" : "#0f2642"}
+            transmission={isLight ? 0.94 : 0.88}
+            roughness={0.06}
+            ior={1.6}
             thickness={1.4}
             clearcoat={1.0}
-            metalness={0.12}
+            metalness={0.1}
             transparent
-            opacity={0.95}
+            opacity={0.96}
           />
         </mesh>
       </group>
@@ -399,7 +443,7 @@ function RefractiveMonolith({
   );
 }
 
-/** Smooth Camera Rig linked to Lenis scrollState with zero jank */
+/** Smooth Camera Rig linked to Lenis scrollState */
 function CameraRig() {
   const p = useRef(0);
   useFrame((state, dt) => {
@@ -414,10 +458,19 @@ function CameraRig() {
 }
 
 export default function OceanScene() {
+  const { theme } = useTheme();
+  const isLight = theme === "light";
+
   return (
     <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      {/* Deep Obsidian Radial Vignette & Cosmic Studio Atmosphere */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_95%_75%_at_85%_10%,rgba(16,40,75,0.45)_0%,transparent_65%),radial-gradient(ellipse_80%_65%_at_15%_50%,rgba(20,60,40,0.32)_0%,transparent_65%),radial-gradient(ellipse_75%_65%_at_50%_90%,rgba(138,92,246,0.16)_0%,transparent_70%),linear-gradient(180deg,#03060c_0%,#060c18_50%,#03050a_100%)]" />
+      {/* Background Gradient adapted to Light / Dark Luxury */}
+      <div
+        className={`absolute inset-0 transition-opacity duration-700 ${
+          isLight
+            ? "bg-[radial-gradient(ellipse_95%_75%_at_85%_10%,rgba(212,175,55,0.18)_0%,transparent_65%),radial-gradient(ellipse_80%_65%_at_15%_50%,rgba(16,185,129,0.12)_0%,transparent_65%),radial-gradient(ellipse_75%_65%_at_50%_90%,rgba(14,165,233,0.1)_0%,transparent_70%),linear-gradient(180deg,#f8fafc_0%,#f1f5f9_50%,#e2e8f0_100%)]"
+            : "bg-[radial-gradient(ellipse_95%_75%_at_85%_10%,rgba(16,40,75,0.45)_0%,transparent_65%),radial-gradient(ellipse_80%_65%_at_15%_50%,rgba(20,60,40,0.32)_0%,transparent_65%),radial-gradient(ellipse_75%_65%_at_50%_90%,rgba(138,92,246,0.16)_0%,transparent_70%),linear-gradient(180deg,#03060c_0%,#060c18_50%,#03050a_100%)]"
+        }`}
+      />
 
       <Canvas
         shadows
@@ -427,45 +480,117 @@ export default function OceanScene() {
           alpha: true,
           powerPreference: "high-performance",
           toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.22,
+          toneMappingExposure: isLight ? 1.05 : 1.22,
         }}
         camera={{ position: [0, 0, 6.9], fov: 40 }}
         eventSource={typeof document !== "undefined" ? document.body : undefined}
         eventPrefix="client"
       >
-        <ambientLight intensity={0.7} color="#dbeafe" />
-        <directionalLight position={[5, 9, 6]} intensity={2.6} color="#ffffff" castShadow />
-        <directionalLight position={[-6, -2, 4]} intensity={1.5} color="#39ff14" />
-        <directionalLight position={[0, -7, 3]} intensity={1.1} color="#e5c378" />
+        <ambientLight
+          intensity={isLight ? 1.3 : 0.7}
+          color={isLight ? "#fffbeb" : "#dbeafe"}
+        />
+        <directionalLight
+          position={[5, 9, 6]}
+          intensity={isLight ? 3.2 : 2.6}
+          color="#ffffff"
+          castShadow
+        />
+        <directionalLight
+          position={[-6, -2, 4]}
+          intensity={isLight ? 1.6 : 1.5}
+          color={isLight ? "#059669" : "#39ff14"}
+        />
+        <directionalLight
+          position={[0, -7, 3]}
+          intensity={isLight ? 1.5 : 1.1}
+          color={isLight ? "#b8860b" : "#e5c378"}
+        />
 
         <Environment resolution={128}>
-          <Lightformer intensity={2.8} position={[0, 7, 2]} scale={[14, 4, 1]} color="#ffffff" />
-          <Lightformer intensity={1.8} position={[-7, 0, 2]} scale={[4, 9, 1]} color="#38bdf8" />
-          <Lightformer intensity={1.4} position={[7, 0, 2]} scale={[4, 9, 1]} color="#e5c378" />
-          <Lightformer intensity={2.0} position={[0, -6, 3]} scale={[9, 4, 1]} color="#39ff14" />
+          <Lightformer
+            intensity={isLight ? 3.2 : 2.8}
+            position={[0, 7, 2]}
+            scale={[14, 4, 1]}
+            color="#ffffff"
+          />
+          <Lightformer
+            intensity={isLight ? 1.4 : 1.8}
+            position={[-7, 0, 2]}
+            scale={[4, 9, 1]}
+            color={isLight ? "#0284c7" : "#38bdf8"}
+          />
+          <Lightformer
+            intensity={isLight ? 1.8 : 1.4}
+            position={[7, 0, 2]}
+            scale={[4, 9, 1]}
+            color={isLight ? "#b8860b" : "#e5c378"}
+          />
+          <Lightformer
+            intensity={isLight ? 1.6 : 2.0}
+            position={[0, -6, 3]}
+            scale={[9, 4, 1]}
+            color={isLight ? "#059669" : "#39ff14"}
+          />
         </Environment>
 
         <CameraRig />
 
         {/* Ultra-Luxury Ethereal Constellation Whale */}
-        <LuxuryCelestialWhale />
+        <LuxuryCelestialWhale isLight={isLight} />
 
         {/* Multi-Million Horological Astrolabe Spheres */}
-        <KineticAstrolabe position={[-2.9, -0.8, -1.9]} />
-        <KineticAstrolabe position={[3.3, -6.6, -2.1]} />
+        <KineticAstrolabe position={[-2.9, -0.8, -1.9]} isLight={isLight} />
+        <KineticAstrolabe position={[3.3, -6.6, -2.1]} isLight={isLight} />
 
         {/* Parametric Flowing Silk Lattice */}
-        <ParametricSilkMesh />
+        <ParametricSilkMesh isLight={isLight} />
 
         {/* Floating High-Index Diamond Monoliths */}
-        <RefractiveMonolith position={[-2.6, -4.6, -1.6]} rotation={[0.4, 0.2, 0.8]} />
-        <RefractiveMonolith position={[2.7, -2.2, -2.1]} rotation={[-0.3, 0.5, -0.6]} />
-        <RefractiveMonolith position={[-1.9, -9.0, -1.3]} rotation={[0.2, -0.4, 0.3]} />
+        <RefractiveMonolith
+          position={[-2.6, -4.6, -1.6]}
+          rotation={[0.4, 0.2, 0.8]}
+          isLight={isLight}
+        />
+        <RefractiveMonolith
+          position={[2.7, -2.2, -2.1]}
+          rotation={[-0.3, 0.5, -0.6]}
+          isLight={isLight}
+        />
+        <RefractiveMonolith
+          position={[-1.9, -9.0, -1.3]}
+          rotation={[0.2, -0.4, 0.3]}
+          isLight={isLight}
+        />
 
         {/* Starlight Constellations & Shimmering Auric Dust */}
-        <Sparkles count={150} scale={[18, 28, 9]} position={[0, -4.5, -2]} size={2.4} speed={0.28} color="#e5c378" opacity={0.65} />
-        <Sparkles count={90} scale={[15, 22, 7]} position={[0, -4.5, -1.5]} size={1.9} speed={0.35} color="#39ff14" opacity={0.55} />
-        <Sparkles count={70} scale={[14, 20, 6]} position={[0, -4.5, -1]} size={2.6} speed={0.22} color="#00f0ff" opacity={0.55} />
+        <Sparkles
+          count={150}
+          scale={[18, 28, 9]}
+          position={[0, -4.5, -2]}
+          size={2.4}
+          speed={0.28}
+          color={isLight ? "#b8860b" : "#e5c378"}
+          opacity={isLight ? 0.5 : 0.65}
+        />
+        <Sparkles
+          count={90}
+          scale={[15, 22, 7]}
+          position={[0, -4.5, -1.5]}
+          size={1.9}
+          speed={0.35}
+          color={isLight ? "#059669" : "#39ff14"}
+          opacity={isLight ? 0.45 : 0.55}
+        />
+        <Sparkles
+          count={70}
+          scale={[14, 20, 6]}
+          position={[0, -4.5, -1]}
+          size={2.6}
+          speed={0.22}
+          color={isLight ? "#0284c7" : "#00f0ff"}
+          opacity={isLight ? 0.45 : 0.55}
+        />
       </Canvas>
     </div>
   );

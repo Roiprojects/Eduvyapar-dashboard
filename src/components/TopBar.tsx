@@ -15,9 +15,12 @@ import {
   BookOpen,
   Boxes,
   Building2,
+  Moon,
+  Sun,
 } from "lucide-react";
 import ModulesOverlay from "./ModulesOverlay";
 import CommandPalette from "./CommandPalette";
+import { useTheme } from "@/context/ThemeContext";
 import { school } from "@/lib/data";
 
 const quickModules = [
@@ -30,6 +33,7 @@ const quickModules = [
 
 export default function TopBar() {
   const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [palette, setPalette] = useState(false);
@@ -142,6 +146,20 @@ export default function TopBar() {
                 </>
               )}
             </div>
+
+            {/* Luxury Theme Switcher (Light / Dark) */}
+            <button
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === "light" ? "Dark Obsidian" : "Luminous Light"} mode`}
+              title={`Switch to ${theme === "light" ? "Dark Obsidian" : "Luminous Light"} mode`}
+              className="relative grid size-9 place-items-center rounded-full bg-white/[0.06] hover:bg-white/[0.12] transition border border-white/[0.1] text-white shadow-md active:scale-95"
+            >
+              {theme === "light" ? (
+                <Moon size={15} className="text-[#996515] transition-transform hover:scale-110" />
+              ) : (
+                <Sun size={15} className="text-[#fae6b2] transition-transform hover:rotate-45" />
+              )}
+            </button>
 
             {/* All Modules Drawer Button */}
             <button
