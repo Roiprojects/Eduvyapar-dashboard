@@ -769,7 +769,7 @@ function Drawer({
 function ApplicationsPage() {
   const params = useSearchParams();
   const [rows, setRows] = useState(seed);
-  const [tab, setTab] = useState(0);
+  const [viewMode, setViewMode] = useState<"form" | "grid" | "both">("both");
   const [q, setQ] = useState(params.get("q") ?? "");
   const [view, setView] = useState<(typeof views)[number]["id"]>(
     params.get("f") === "unpaid" ? "unpaid" : "all",
@@ -780,7 +780,7 @@ function ApplicationsPage() {
   const [dense, setDense] = useState(false);
   const [sel, setSel] = useState<Set<string>>(new Set());
   const [peek, setPeek] = useState<Applicant | null>(null);
-  const [editing, setEditing] = useState<Applicant | null | "new">(params.get("new") ? "new" : null);
+  const [editing, setEditing] = useState<Applicant | null | "new">("new");
 
   const data = useMemo(() => {
     const test = views.find((v) => v.id === view)!.test;
@@ -850,7 +850,11 @@ function ApplicationsPage() {
         <motion.button
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          onClick={() => setEditing("new")}
+          onClick={() => {
+            setEditing("new");
+            setViewMode("both");
+            window.scrollTo({ top: 400, behavior: "smooth" });
+          }}
           className="inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#e5c378] via-[#fae6b2] to-[#e5c378] px-7 py-4 text-xs font-bold text-[#05080e] shadow-xl shadow-[#e5c378]/25 hover:brightness-110 transition"
         >
           <Plus size={16} /> ✦ New Intake Dossier
@@ -877,41 +881,70 @@ function ApplicationsPage() {
         ))}
       </div>
 
-      {/* TABS */}
-      <div className="glass relative mt-8 grid grid-cols-2 rounded-full p-1.5 border border-white/[0.08] bg-[#070e1b]/80">
-        {["✦ Application Forms Matrix", "✦ Health & Biometrics Archive"].map((t, i) => (
+      {/* EXECUTIVE VIEW CONTROLLER */}
+      <div className="glass relative mt-8 flex flex-wrap items-center justify-between gap-3 rounded-2xl p-2 border border-white/[0.1] bg-[#070e1b]/90 shadow-xl">
+        <div className="flex flex-wrap items-center gap-2">
           <button
-            key={t}
-            onClick={() => setTab(i)}
-            className="relative rounded-full py-3 text-xs font-bold transition"
+            onClick={() => {
+              setViewMode("form");
+              if (!editing) setEditing("new");
+            }}
+            className={`rounded-xl px-5 py-2.5 text-xs font-bold transition flex items-center gap-2 ${
+              viewMode === "form"
+                ? "bg-gradient-to-r from-[#e5c378] to-[#fae6b2] text-[#05080e] shadow-lg shadow-[#e5c378]/20"
+                : "text-white/60 hover:text-white hover:bg-white/[0.06]"
+            }`}
           >
-            {tab === i && (
-              <motion.span
-                layoutId="tab"
-                className="absolute inset-0 rounded-full bg-gradient-to-r from-[#0c2440] to-[#081525] border border-[#e5c378]/30 shadow-lg shadow-black/60"
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              />
-            )}
-            <span className={`relative z-10 ${tab === i ? "text-[#fae6b2]" : "text-white/55 hover:text-white"}`}>
-              {t}
-            </span>
+            <Sparkles size={14} className={viewMode === "form" ? "text-[#05080e]" : "text-[#e5c378]"} />
+            <span>✦ VIP Intake Form (Active)</span>
           </button>
-        ))}
+          <button
+            onClick={() => {
+              setViewMode("both");
+              if (!editing) setEditing("new");
+            }}
+            className={`rounded-xl px-5 py-2.5 text-xs font-bold transition flex items-center gap-2 ${
+              viewMode === "both"
+                ? "bg-gradient-to-r from-[#39ff14] to-[#22c55e] text-[#05080e] shadow-lg shadow-[#39ff14]/20"
+                : "text-white/60 hover:text-white hover:bg-white/[0.06]"
+            }`}
+          >
+            <Rows3 size={14} className={viewMode === "both" ? "text-[#05080e]" : "text-[#39ff14]"} />
+            <span>✦ Dual Panoramic View (Form + Grid)</span>
+          </button>
+          <button
+            onClick={() => setViewMode("grid")}
+            className={`rounded-xl px-5 py-2.5 text-xs font-bold transition flex items-center gap-2 ${
+              viewMode === "grid"
+                ? "bg-gradient-to-r from-[#e5c378] to-[#fae6b2] text-[#05080e] shadow-lg shadow-[#e5c378]/20"
+                : "text-white/60 hover:text-white hover:bg-white/[0.06]"
+            }`}
+          >
+            <LayoutList size={14} />
+            <span>✦ Candidate Ledger &amp; Grid ({rows.length})</span>
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2 px-3 py-1 text-xs text-white/50">
+          <span className="size-2 rounded-full bg-[#39ff14] animate-pulse" />
+          <span className="font-semibold text-white/70">Autonomous Intake Engine Live</span>
+        </div>
       </div>
 
-      {/* WIZARD CONTAINER */}
-      <div className="mt-6">
+      {/* WIZARD CONTAINER - PROMINENTLY SHOWN BY DEFAULT */}
+      <div className="mt-8">
         <AnimatePresence mode="wait">
-          {editing && (
+          {(viewMode === "form" || viewMode === "both") && (
             <Wizard
-              key={editing === "new" ? "new" : editing.appNo}
-              a={editing === "new" ? null : editing}
-              onClose={() => setEditing(null)}
+              key={editing === "new" || !editing ? "new" : editing.appNo}
+              a={!editing || editing === "new" ? null : editing}
+              onClose={() => setViewMode("grid")}
               onSave={(a) => {
                 setRows((r) =>
                   r.some((x) => x.appNo === a.appNo) ? r.map((x) => (x.appNo === a.appNo ? a : x)) : [a, ...r],
                 );
                 setEditing(null);
+                setViewMode("grid");
               }}
             />
           )}
@@ -919,6 +952,7 @@ function ApplicationsPage() {
       </div>
 
       {/* CANDIDATE DATA GRID */}
+      {(viewMode === "grid" || viewMode === "both") && (
       <div className="glass overflow-hidden rounded-[32px] border border-white/[0.08] bg-[#070e1a]/90 shadow-2xl">
         {/* Controls Bar */}
         <div className="flex flex-wrap items-center gap-3 p-4 sm:p-5 border-b border-white/[0.06] bg-white/[0.02]">
@@ -1067,7 +1101,11 @@ function ApplicationsPage() {
                     <td className={`px-4 ${py}`} onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center justify-end gap-2.5">
                         <button
-                          onClick={() => setEditing(r)}
+                          onClick={() => {
+                            setEditing(r);
+                            setViewMode("both");
+                            window.scrollTo({ top: 380, behavior: "smooth" });
+                          }}
                           aria-label={`Edit ${r.name}`}
                           className="grid size-8 place-items-center rounded-full bg-white/[0.06] text-white/70 opacity-0 transition group-hover:opacity-100 hover:bg-[#39ff14] hover:text-[#05080e] focus:opacity-100"
                         >
@@ -1181,6 +1219,7 @@ function ApplicationsPage() {
           </div>
         </div>
       </div>
+      )}
 
       {/* Floating Bulk Action Dock */}
       <AnimatePresence>
@@ -1230,7 +1269,8 @@ function ApplicationsPage() {
         onEdit={(r) => {
           setPeek(null);
           setEditing(r);
-          window.scrollTo({ top: 0 });
+          setViewMode("both");
+          window.scrollTo({ top: 380, behavior: "smooth" });
         }}
       />
     </div>

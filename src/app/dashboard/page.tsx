@@ -3,7 +3,20 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown, ArrowUpRight, FileText, IndianRupee, GraduationCap, Users, Sparkles } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUpRight,
+  CheckCircle2,
+  FileCheck2,
+  FileText,
+  GraduationCap,
+  IndianRupee,
+  MapPin,
+  ShieldCheck,
+  Sparkles,
+  UserPlus,
+  Users,
+} from "lucide-react";
 import { Counter, HoverTilt, Reveal, SplitText, Tilt3D } from "@/components/ui/motion";
 import PrincipalAssistant from "@/components/dashboard/PrincipalAssistant";
 import ModulesRail from "@/components/dashboard/ModulesRail";
@@ -231,6 +244,177 @@ export default function DashboardPage() {
 
       {/* 3D MODULES RAIL */}
       <ModulesRail />
+
+      {/* VIP ADMISSION INTAKE & ADMISSION FORM SHOWCASE */}
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+        <Reveal className="mb-8 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#39ff14]/10 px-3.5 py-1 text-[11px] font-bold tracking-widest text-[#39ff14] border border-[#39ff14]/25 uppercase mb-2">
+              <Sparkles size={13} />
+              <span>Autonomous Admissions Terminal</span>
+            </div>
+            <h2 className="font-display text-4xl sm:text-6xl font-bold text-white tracking-tight">
+              VIP Candidate Intake Form
+            </h2>
+          </div>
+          <p className="max-w-md text-xs sm:text-sm text-white/60 leading-relaxed">
+            Directly register high-value candidates with biometric photo vaulting, PIN geocoding, and autonomous fee settlement.
+          </p>
+        </Reveal>
+
+        <Tilt3D>
+          <div className="glass overflow-hidden rounded-[36px] border border-white/[0.12] bg-[#070e1b]/95 p-8 sm:p-10 shadow-2xl grid gap-8 lg:grid-cols-12">
+            {/* Left: Interactive Quick Intake Dossier */}
+            <div className="lg:col-span-7 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between border-b border-white/[0.06] pb-4 mb-6">
+                  <div>
+                    <span className="text-[10px] font-bold tracking-[0.25em] text-[#e5c378] uppercase">
+                      ✦ Direct Institutional Entry
+                    </span>
+                    <h3 className="font-display text-2xl font-bold text-white mt-0.5">
+                      New Candidate Dossier Entry
+                    </h3>
+                  </div>
+                  <span className="rounded-full bg-[#39ff14]/15 px-3 py-1 text-[11px] font-bold text-[#39ff14] border border-[#39ff14]/30">
+                    Step 1 of 5 Ready
+                  </span>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-white/60 mb-1.5">
+                      Candidate Full Name <span className="text-[#39ff14]">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue="Aarav N. Sharma"
+                      placeholder="Enter student legal name"
+                      className="w-full rounded-2xl border border-white/[0.1] bg-white/[0.04] px-4 py-3 text-xs text-white placeholder-white/30 outline-none focus:border-[#e5c378] focus:ring-2 focus:ring-[#e5c378]/20"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-white/60 mb-1.5">
+                      Verified Guardian Mobile <span className="text-[#39ff14]">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      defaultValue="+91 98452 10982"
+                      placeholder="10-digit mobile number"
+                      className="w-full rounded-2xl border border-white/[0.1] bg-white/[0.04] px-4 py-3 text-xs text-white placeholder-white/30 outline-none focus:border-[#e5c378] focus:ring-2 focus:ring-[#e5c378]/20"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-white/60 mb-1.5">
+                      Technical Trade Allocation <span className="text-[#39ff14]">*</span>
+                    </label>
+                    <select
+                      defaultValue="1Yr Fitter SH1"
+                      className="w-full rounded-2xl border border-white/[0.1] bg-[#0c182a] px-4 py-3 text-xs text-white outline-none focus:border-[#e5c378]"
+                    >
+                      <option value="1Yr Fitter SH1">1Yr Fitter SH1 (Available)</option>
+                      <option value="1Yr Electrician SH1">1Yr Electrician SH1 (High Demand)</option>
+                      <option value="1Yr Welder SH1">1Yr Welder SH1 (Available)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-white/60 mb-1.5">
+                      Postal PIN Geocode <span className="text-[#39ff14]">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue="560041"
+                      placeholder="e.g. 560041 (Auto-Bengaluru)"
+                      className="w-full rounded-2xl border border-white/[0.1] bg-white/[0.04] px-4 py-3 text-xs text-white placeholder-white/30 outline-none focus:border-[#e5c378] focus:ring-2 focus:ring-[#e5c378]/20"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-5 rounded-2xl bg-white/[0.03] p-4 border border-white/[0.06] flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-3">
+                    <span className="grid size-9 place-items-center rounded-xl bg-[#39ff14]/15 text-[#39ff14]">
+                      <FileCheck2 size={16} />
+                    </span>
+                    <div>
+                      <p className="font-semibold text-white">Automated Document Checklist</p>
+                      <p className="text-[11px] text-white/50">SSLC Marks, Aadhaar Card, Photo ID</p>
+                    </div>
+                  </div>
+                  <span className="rounded-full bg-[#e5c378]/15 px-2.5 py-0.5 text-[10px] font-bold text-[#fae6b2] border border-[#e5c378]/20">
+                    Auto-Verified
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-wrap items-center gap-4 pt-6 border-t border-white/[0.06]">
+                <Link
+                  href="/dashboard/preadmission?new=1"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#e5c378] via-[#fae6b2] to-[#e5c378] px-7 py-3.5 text-xs font-bold text-[#05080e] shadow-xl shadow-[#e5c378]/25 hover:brightness-110 transition"
+                >
+                  <UserPlus size={15} /> ✦ Open Complete 5-Step Dossier Form
+                </Link>
+                <Link
+                  href="/dashboard/preadmission"
+                  className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-5 py-3.5 text-xs font-bold text-white/70 hover:bg-white/[0.12] hover:text-white transition border border-white/[0.08]"
+                >
+                  <span>View All 24 Dossiers</span> <ArrowUpRight size={14} />
+                </Link>
+              </div>
+            </div>
+
+            {/* Right: Telemetry Hologram Card */}
+            <div className="lg:col-span-5 rounded-3xl bg-gradient-to-br from-[#0c2440] to-[#061222] p-6 text-white border border-white/[0.1] shadow-xl flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold tracking-[0.25em] text-[#e5c378] uppercase">
+                    ✦ Live Quota Telemetry
+                  </span>
+                  <span className="size-2 rounded-full bg-[#39ff14] shadow-[0_0_8px_#39ff14]" />
+                </div>
+
+                <div className="mt-5">
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-3xl font-extrabold text-white font-display">84.0%</span>
+                    <span className="text-xs text-[#39ff14] font-semibold">420 / 500 Seats Filled</span>
+                  </div>
+                  <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-white/[0.1] p-[1px]">
+                    <motion.div
+                      className="h-full rounded-full bg-gradient-to-r from-[#e5c378] to-[#39ff14]"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: "84%" }}
+                      transition={{ duration: 1.2, ease: "easeOut" }}
+                    />
+                  </div>
+                </div>
+
+                <dl className="mt-6 space-y-3 text-xs">
+                  {[
+                    ["Available Trade Quota", "80 Seats Remaining"],
+                    ["Verified Intake Fee", "₹2,500 per candidate"],
+                    ["Today's New Inflow", "14 Confirmed Enrollees"],
+                    ["Automated Recovery SMS", "96.4% Conversion"],
+                  ].map(([label, val]) => (
+                    <div key={label} className="flex justify-between border-b border-white/[0.04] pb-2">
+                      <dt className="text-white/50">{label}</dt>
+                      <dd className="font-semibold text-white/90">{val}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+
+              <div className="mt-6 rounded-2xl bg-[#39ff14]/10 p-3.5 border border-[#39ff14]/20 flex items-center gap-3">
+                <ShieldCheck size={20} className="text-[#39ff14] shrink-0" />
+                <p className="text-[11px] text-white/80 leading-snug">
+                  <b className="text-white font-semibold">Encrypted Sovereign Vault:</b> All candidate documents & biometric signatures are verified against state education ledgers.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Tilt3D>
+      </section>
 
       {/* RECENT APPLICATIONS */}
       <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
